@@ -1,0 +1,21 @@
+{
+  "name": "mlh-prime",
+  "version": "1.0.0",
+  "description": "a music generator using twitter api",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xanthehammer/mlh-prime.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xanthehammer/mlh-prime/issues"
+  },
+  "dependencies": {
+  	"express": "4.14.0"
+  }
+}
