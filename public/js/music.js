@@ -125,6 +125,7 @@ var eighth_loop = new Tone.Loop(function(time) {
   } else {
     synth.triggerRelease();
   }
+  console.log(eighth_notes);
   console.log(eighth_notes.length+quarter_notes.length+half_notes.length)
 }, "8n").start(0);
 
@@ -191,43 +192,37 @@ function generate_song(data) {
   var happiness = (joy + confident + extraversion + openness)/4;
   var unhappiness = (anger + disgust + fear + sadness)/4;
 
-  var length = ((Math.floor(character_count / 64)) == 0) ? 1 : character_count / 64;
+  var length = ((Math.floor(character_count / 64)) == 0) ? 1 : (character_count / 64);
 
   if(happiness-unhappiness < 0){
     if(sadness+disgust > anger+fear){
-      for (var i = 0; i < 4*length*measures; i++) {
+      for (var i = 0; i < ((4*length)*measures); i++) {
         quarter_notes.push(minor.next()+octave);
       }
-      for (var i = 0; i < 2*length*measures; i++) {
+      for (var i = 0; i < ((2*length)*measures); i++) {
         half_notes.push(minor.next()+low_octave);
     }
   }
     else{
-      for (var i = 0; i < 8*length*measures; i++) {
+      for (var i = 0; i < ((8*length)*measures); i++) {
         eighth_notes.push(minor.next()+high_octave);
       }
-      for (var i = 0; i < 4*length*measures; i++) {
+      for (var i = 0; i < ((4*length)*measures); i++) {
         quarter_notes.push(minor.next()+octave);
       }
     }
   }
   else{
-    if(joy+openness> extraversion+confident){
-      for (var i = 0; i < 8*length*measures; i++) {
+      for (var i = 0; i < ((8*length)*measures); i++) {
         eighth_notes.push(major.next()+high_octave);
       }
-      for (var i = 0; i < 4*length*measures; i++) {
+      for (var i = 0; i < ((4*length)*measures); i++) {
         quarter_notes.push(major.next()+octave);
       }
-    }
-    else{
-      for (var i = 0; i < 4*length*measures; i++) {
-        quarter_notes.push(major.next()+octave);
-      }
-      for (var i = 0; i < 2*length*measures; i++) {
+      for (var i = 0; i < ((2*length)*measures); i++) {
         half_notes.push(major.next()+low_octave);
       }
-    }
+
   }
   /*for (var i = 0; i < 8; i++) {
     eighth_notes.push(major.next()+high_octave);
