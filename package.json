@@ -4,7 +4,8 @@
   "description": "a music generator using twitter api",
   "main": "app.js",
   "scripts": {
-    "test": "node app.js"
+    "test": "node app.js",
+    "postinstall": "node_modules/bower/bin/bower install -F"
   },
   "repository": {
     "type": "git",
@@ -16,6 +17,7 @@
     "url": "https://github.com/xanthehammer/mlh-prime/issues"
   },
   "dependencies": {
+    "bower": "^1.8.0",
     "express": "4.14.0",
     "socket.io": "^1.5.1",
     "twit": "^2.2.5",
