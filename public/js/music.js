@@ -1,400 +1,259 @@
-var wordCount = 0;
-var isHappy = false;
-var isSad = true;
-var isAngry = false;
-var isAfraid = false;
+var socket = io.connect();
 
-var bpm = 80;
-var OctaveLow = "4";
-var OctaveMel = "3";
+var major = new Tone.CtrlMarkov({
+  "A": [{"value": "A", "probability": 0.21},
+        {"value": "B", "probability": 0.23},
+        {"value": "C", "probability": 0.21},
+        {"value": "D", "probability": 0.1},
+        {"value": "E", "probability": 0.1},
+        {"value": "F", "probability": 0.1},
+        {"value": "G", "probability": 0.05}],
+  "B": [{"value": "A", "probability": 0.11},
+        {"value": "B", "probability": 0.15},
+        {"value": "C", "probability": 0.46},
+        {"value": "D", "probability": 0.07},
+        {"value": "E", "probability": 0.07},
+        {"value": "F", "probability": 0.07},
+        {"value": "G", "probability": 0.07}],
+    "C": [{"value": "A", "probability": 0.1},
+        {"value": "B", "probability": 0.15},
+        {"value": "C", "probability": 0.25},
+        {"value": "D", "probability": 0.20},
+            {"value": "E", "probability": 0.1},
+            {"value": "F", "probability": 0.1},
+        {"value": "G", "probability": 0.1}],
+    "D": [{"value": "A", "probability": 0.09},
+           {"value": "B", "probability": 0.09},
+           {"value": "C", "probability": 0.25},
+       {"value": "D", "probability": 0.20},
+       {"value": "E", "probability": 0.1},
+       {"value": "F", "probability": 0.1},
+       {"value": "G", "probability": 0.1}],
+  "E": [{"value": "A", "probability": 0.08},
+          {"value": "B", "probability": 0.08},
+            {"value": "C", "probability": 0.12},
+        {"value": "D", "probability": 0.20},
+        {"value": "E", "probability": 0.20},
+        {"value": "F", "probability": 0.20},
+        {"value": "G", "probability": 0.12}],
+  "F": [{"value": "A", "probability": 0.11},
+        {"value": "B", "probability": 0.07},
+        {"value": "C", "probability": 0.11},
+        {"value": "D", "probability": 0.11},
+        {"value": "E", "probability": 0.15},
+        {"value": "F", "probability": 0.20},
+        {"value": "G", "probability": 0.25}],
+  "G": [{"value": "A", "probability": 0.05},
+        {"value": "B", "probability": 0.11},
+        {"value": "C", "probability": 0.11},
+        {"value": "D", "probability": 0.11},
+        {"value": "E", "probability": 0.11},
+        {"value": "F", "probability": 0.26},
+        {"value": "G", "probability": 0.25}]
+});
 
-if (isHappy) {
-	OctaveLow = "4";
-	OctaveMel = "5";
-	bpm = 80;
-} else if(isSad) {
-	OctaveLow = "2";
-	OctaveMel = "3";
-	bpm = 50;
-} else if(isAngry) {
-	OctaveLow = "2";
-	OctaveMel = "4";
-	bpm = 100;
-} else if(isAfraid) {
-	OctaveLow = "1";
-	OctaveMel =  "3";
-	bpm = 75;
+var minor = new Tone.CtrlMarkov({
+  "Ab": [{"value": "Ab", "probability": 0.21},
+        {"value": "Bb", "probability": 0.23},
+        {"value": "C", "probability": 0.21},
+        {"value": "D", "probability": 0.1},
+        {"value": "Eb", "probability": 0.1},
+        {"value": "F", "probability": 0.1},
+        {"value": "G", "probability": 0.05}],
+  "Bb": [{"value": "Ab", "probability": 0.11},
+        {"value": "Bb", "probability": 0.15},
+        {"value": "C", "probability": 0.46},
+        {"value": "D", "probability": 0.07},
+        {"value": "Eb", "probability": 0.07},
+        {"value": "F", "probability": 0.07},
+        {"value": "G", "probability": 0.07}],
+    "C": [{"value": "Ab", "probability": 0.1},
+        {"value": "Bb", "probability": 0.15},
+        {"value": "C", "probability": 0.25},
+        {"value": "D", "probability": 0.20},
+            {"value": "Eb", "probability": 0.1},
+            {"value": "F", "probability": 0.1},
+        {"value": "G", "probability": 0.1}],
+    "D": [{"value": "Ab", "probability": 0.09},
+           {"value": "Bb", "probability": 0.09},
+           {"value": "C", "probability": 0.25},
+       {"value": "D", "probability": 0.20},
+       {"value": "Eb", "probability": 0.1},
+       {"value": "F", "probability": 0.1},
+       {"value": "G", "probability": 0.1}],
+  "Eb": [{"value": "Ab", "probability": 0.08},
+          {"value": "Bb", "probability": 0.08},
+            {"value": "C", "probability": 0.12},
+        {"value": "D", "probability": 0.20},
+        {"value": "Eb", "probability": 0.20},
+        {"value": "F", "probability": 0.20},
+        {"value": "G", "probability": 0.12}],
+  "F": [{"value": "Ab", "probability": 0.11},
+        {"value": "Bb", "probability": 0.07},
+        {"value": "C", "probability": 0.11},
+        {"value": "D", "probability": 0.11},
+        {"value": "Eb", "probability": 0.15},
+        {"value": "F", "probability": 0.20},
+        {"value": "G", "probability": 0.25}],
+  "G": [{"value": "Ab", "probability": 0.05},
+        {"value": "Bb", "probability": 0.11},
+        {"value": "C", "probability": 0.11},
+        {"value": "D", "probability": 0.11},
+        {"value": "Eb", "probability": 0.11},
+        {"value": "F", "probability": 0.26},
+        {"value": "G", "probability": 0.25}]
+});
+
+var low_octave = "2";
+var octave = "3";
+var high_octave = "4";
+
+var eighth_notes = [];
+
+var quarter_notes = [];
+
+var half_notes = [];
+
+var synth = new Tone.Synth().toMaster();
+var synth2 = new Tone.Synth().toMaster();
+var synth3 = new Tone.Synth().toMaster();
+
+var eighth_loop = new Tone.Loop(function(time) {
+  //triggered every eighth note.
+  if (eighth_notes.length != 0) {
+    synth.triggerAttack(eighth_notes.pop());
+  } else {
+    synth.triggerRelease();
+  }
+  console.log(eighth_notes.length+quarter_notes.length+half_notes.length)
+}, "8n").start(0);
+
+var quarter_loop = new Tone.Loop(function(time) {
+  //triggered every eighth note.
+  if (quarter_notes.length != 0) {
+    synth2.triggerAttack(quarter_notes.pop());
+  } else {
+    synth2.triggerRelease();
+  }
+}, "4n").start(0);
+
+var half_loop = new Tone.Loop(function(time) {
+  //triggered every eighth note.
+  if (half_notes.length != 0) {
+    synth3.triggerAttack(half_notes.pop());
+  } else {
+    synth3.triggerRelease();
+  }
+}, "2n").start(0);
+
+Tone.Transport.start();
+
+socket.on('tweet', function (data) {
+  console.log(data.tone);
+  generate_song(data);
+  $("#empty").remove();
+  $("#tweets").prepend(
+    '<li class="list-group-item">' +
+      '<div class="post">' +
+        '<div class="post-heading">' +
+          '<div class="pull-left image">' +
+            '<img src="'+data.tweet.user.profile_image_url+'" class="img-circle avatar" alt="user profile image">' +
+          '</div>' +
+          '<div class="pull-left meta">' +
+            '<div class="title h5">' +
+              '<a href="https://twitter.com/'+data.tweet.user.screen_name+'"><b>'+data.tweet.user.name +' (@'+data.tweet.user.screen_name+')</b></a>' +
+            '</div>' +
+            '<h6 class="text-muted time">'+data.tweet.created_at+'</h6>' +
+          '</div>' +
+        '</div>' +
+        '<div class="post-description">' +
+          '<p>'+data.tweet.text+'</p>' +
+        '</div>' +
+      '</div>' +
+    '</div>'
+  );
+});
+
+function generate_song(data) {
+  var character_count = data.tweet.text.length;
+
+
+  for (var i = 0; i < 8; i++) {
+    eighth_notes.push(major.next()+high_octave);
+  }
+  for (var i = 0; i < 4; i++) {
+    quarter_notes.push(major.next()+octave);
+  }
+  for (var i = 0; i < 2; i++) {
+    half_notes.push(major.next()+low_octave);
+  }
 }
 
-Tone.Transport.bpm.value = bpm;
+/*
+var test = Tone.Transport.scheduleOnce(function() {
+  var melody_eighth = eighth_notes.pop();
+  var melody_quarter = quarter_notes.pop();
+  var melody_half = half_notes.pop();
 
-function CGenerator() {
-	var melNotes = [];
-	//var Octave = "4";
-	for (var i = 0; i < 4; i++) {
-		rand = Math.floor((Math.random() * 10) + 1);
+  var seq = new Tone.Sequence(function(time, note) {
+      synth3.triggerAttackRelease(note);
+  }, melody_eighth, "8n");
+  seq.loop = false;
 
-		if (rand > 5) {
-			melNotes.push("C" + OctaveMel);
-		} else if(rand > 3) {
-			melNotes.push("E" + OctaveMel);
-		} else if(rand > 1) {
-			melNotes.push("F" + OctaveMel);
-		} else {
-			melNotes.push("G" + OctaveMel);
-		}
-	}
-	
-	return melNotes;
+  var seq2 = new Tone.Sequence(function(time, note) {
+      synth2.triggerAttackRelease(note);
+  }, melody_quarter, "4n");
+  seq2.loop = false;
+  
+
+  var seq3 = new Tone.Sequence(function(time, note) {
+      synth3.triggerAttackRelease(note);
+  }, melody_half, "2n");
+  seq3.loop = false;
+
+  seq.start(0);
+  seq2.start(0);
+  seq3.start(0);
+
+}, 0);
+
+/*
+var eighth_notes = [];
+var quarter_notes = [];
+var half_notes = [];
+
+/*
+// get notes
+for (var x = 0; x < 16; x++) {
+    var note = minor.next();
+    eighth_notes.push(note+high_octave);
+}
+// get notes
+for (var x = 0; x < 8; x++) {
+    var note = minor.next();
+    quarter_notes.push(note+octave);
+}
+for (var x = 0; x < 4; x++) {
+    var note = minor.next();
+    half_notes.push(note+low_octave);
 }
 
+var synth = new Tone.Synth().toMaster();
+var synth2 = new Tone.Synth().toMaster();
+var synth3 = new Tone.Synth().toMaster();
 
-function GGenerator() {
-	var melNotes = [];
-	//var Octave = "4";
-	for (var i = 0; i < 4; i++) {
-		rand = Math.floor((Math.random() * 10) + 1);
-		if (rand > 5) {
-			melNotes.push("G" + OctaveMel);
-		} else if(rand > 3) {
-			melNotes.push("B" + OctaveMel);
-		} else if(rand > 1) {
-			melNotes.push("D" + OctaveMel);
-		} else {
-			melNotes.push("C" + OctaveMel);
-		}
-	}
+var seq = new Tone.Sequence(function(time, note){
+    synth3.triggerAttackRelease(note);
+}, eighth_notes, "8n").start(0);
 
-	return melNotes;
-}
+var seq2 = new Tone.Sequence(function(time, note){
+    synth.triggerAttackRelease(note);
+}, quarter_notes, "4n").start(0);
 
-function FGenerator() {
-	var melNotes = [];
-	//var Octave = "4";
-	for (var i = 0; i < 4; i++) {
-		rand = Math.floor((Math.random() * 10) + 1);
-		if(rand > 5){
-			melNotes.push("F" + OctaveMel);
-		}
-		else if(rand > 3){
-			melNotes.push("A" + OctaveMel);
-		}
-		else if(rand > 1){
-			melNotes.push("C" + OctaveMel);
-		}
-		else{
-			melNotes.push("B" + OctaveMel);
-		}
-	}
-	return melNotes;
-}
+var seq3 = new Tone.Sequence(function(time, note){
+    synth2.triggerAttackRelease(note);
+}, half_notes, "2n").start(0);
 
-function amGenerator() {
-	var melNotes = [];
-	//var Octave = "4";
-	for (var i = 0; i < 4; i++) {
-		rand = Math.floor((Math.random() * 10) + 1);
-		if (rand > 7) {
-			melNotes.push("A" + OctaveMel);
-		} else if(rand > 4) {
-			melNotes.push("C" + OctaveMel);
-		} else if(rand > 2) {
-			melNotes.push("E" + OctaveMel);
-		} else {
-			melNotes.push("D" + OctaveMel);
-		}
-	}	
-	return melNotes;
-}
-
-function dmGenerator() {
-	var melNotes = [];
-	//var Octave = "4";
-	for (var i = 0; i < 4; i++) {
-		rand = Math.floor((Math.random() * 10) + 1);
-		if (rand > 5) {
-			melNotes.push("D" + OctaveMel);
-		} else if(rand > 3) {
-			melNotes.push("F" + OctaveMel);
-		} else if(rand > 1) {
-			melNotes.push("A" + OctaveMel);
-		} else {
-			melNotes.push("G" + OctaveMel);
-		}
-	}
-	return melNotes;
-}
-
-function emGenerator() {
-	var melNotes = [];
-	//var Octave = "4";
-	for (var i = 0; i < 4; i++) {
-		rand = Math.floor((Math.random() * 10) + 1);
-		if (rand > 5) {
-			melNotes.push("D" + OctaveMel);
-		} else if(rand > 3) {
-			melNotes.push("F" + OctaveMel);
-		} else if(rand > 1) {
-			melNotes.push("A" + OctaveMel);
-		} else {
-			melNotes.push("G" + OctaveMel);
-		}
-	}
-	return melNotes;
-}
-
-
-var Octave = "3";
-var ccChord = ["C" + OctaveLow, "E" + OctaveLow, "G" + OctaveLow];
-var cfChord = ["F" + OctaveLow, "A" + OctaveLow, "G" + OctaveLow];
-var cgChord = ["G" + OctaveLow, "B" + OctaveLow, "D" + OctaveLow];
-var camChord = ["A" + Octave, "C" + Octave, "E" + Octave];
-var cemChord = ["E" + OctaveLow, "G" + OctaveLow, "B" + OctaveLow];
-//Code all chords
-//Key C
-var c4 = [ccChord, cfChord, cgChord, camChord, cemChord];
-//Key C
-Octave = "3";
-var lowccChord = ["C" + OctaveLow, "E" + OctaveLow, "G" + OctaveLow];
-var lowcfChord = ["F" + OctaveLow, "A" + OctaveLow, "G" + OctaveLow];
-var lowcgChord = ["G" + OctaveLow, "B" + OctaveLow, "D" + OctaveLow];
-var lowcamChord = ["A" + OctaveLow, "C" + OctaveLow, "E" + OctaveLow];
-var lowcemChord = ["E" + OctaveLow, "G" + OctaveLow, "B" + OctaveLow];
-var amcChord = ["C" + OctaveLow, "E" + OctaveLow, "G" + OctaveLow];
-var amfChord = ["F" + OctaveLow, "A" + OctaveLow, "G" + OctaveLow];
-var amgChord = ["G" + OctaveLow, "B" + OctaveLow, "D" + OctaveLow]; 
-var amChord = ["A" + OctaveLow, "C" + OctaveLow, "E" + OctaveLow];
-var amemChord = ["E" + OctaveLow, "G" + OctaveLow, "B" + OctaveLow];
-var amdmChord = ["D" + OctaveLow, "F" + OctaveLow, "A" + OctaveLow];
-var high = [];
-var low = [];
-var mel = [];
-
-var majmin = true;
-var synth = new Tone.PolySynth(6, Tone.Synth).toMaster();
-var vol = new Tone.Volume(-12);
-synth.chain(vol, Tone.Master);
-//low synth
-var synth1 = new Tone.PluckSynth().toMaster();
-var vol = new Tone.Volume(-12);
-synth1.chain(vol, Tone.Master);
-
-Tone.Transport.stop();
-var minor = [];
-var minorMel = [];
-
-for (var i = 0; i < 2; i++) {
-	minor.push(amChord);
-	minorMel.push(amGenerator());
-
-	rand = Math.floor((Math.random() * 10) + 1);
-	if (rand % 2 == 0) {
-		minor.push(amdmChord);
-		rand = Math.floor((Math.random() * 10) + 1);
-		if (rand % 2 == 0) {
-			minor.push(amemChord);
-		} else {
-			minor.push(amgChord);
-		}
-	} else {
-		minor.push(amfChord);
-		rand = Math.floor((Math.random() * 10) + 1);
-		if (rand%2 == 0) {
-			minor.push(amcChord);
-		}
-		minor.push(amgChord);
-	}
-
-	mel.push(CGenerator());
-
-	//2nd sequence
-	low.push(lowccChord);
-	rand = Math.floor((Math.random() * 10) + 1);
-	if (rand % 2 == 1) {
-		low.push(cfChord);
-		mel.push(FGenerator());
-		rand = Math.floor((Math.random() * 10) + 1);
-		if (rand % 2 == 0) {
-			low.push(lowcgChord);
-			mel.push(GGenerator());
-		}
-	} else {
-		low.push(lowcgChord);
-		mel.push(GGenerator());
-	}
-
-	low.push(lowcamChord);
-	mel.push(amGenerator());
-	rand = Math.floor((Math.random() * 10) + 1);
-	if (rand % 3 == 0) {
-		low.push(lowcfChord);
-		mel.push(FGenerator());
-		low.push(lowcgChord);
-		mel.push(GGenerator());
-	} else if (rand % 3 == 1) {
-		low.push(lowcemChord);
-		mel.push(emGenerator());
-		low.push(lowcfChord);
-		mel.push(FGenerator());
-	} else {
-		low.push(lowcgChord);
-		mel.push(GGenerator());
-		low.push(lowcfChord);
-		mel.push(FGenerator());
-		low.push(lowcgChord);
-		mel.push(GGenerator());
-	}
-}
-
-
-// SECOND TIME
-
-var minor2 = [];
-var minorMel2 = [];
-var low2 = [];
-var mel2 = [];
-
-for (var i = 0; i < 2; i++) {
-	minor2.push(amChord);
-	minorMel2.push(amGenerator());
-
-	rand = Math.floor((Math.random() * 10) + 1);
-	if (rand % 2 == 0) {
-		minor2.push(amdmChord);
-		rand = Math.floor((Math.random() * 10) + 1);
-		if (rand % 2 == 0) {
-			minor2.push(amemChord);
-		} else {
-			minor2.push(amgChord);
-		}
-	} else {
-		minor2.push(amfChord);
-		rand = Math.floor((Math.random() * 10) + 1);
-		if (rand%2 == 0) {
-			minor2.push(amcChord);
-		}
-		minor2.push(amgChord);
-	}
-
-	mel2.push(CGenerator());
-
-	//2nd sequence
-	low2.push(lowccChord);
-	rand = Math.floor((Math.random() * 10) + 1);
-	if (rand % 2 == 1) {
-		low2.push(cfChord);
-		mel2.push(FGenerator());
-		rand = Math.floor((Math.random() * 10) + 1);
-		if (rand % 2 == 0) {
-			low2.push(lowcgChord);
-			mel2.push(GGenerator());
-		}
-	} else {
-		low2.push(lowcgChord);
-		mel2.push(GGenerator());
-	}
-	low2.push(lowcamChord);
-	mel2.push(amGenerator());
-	rand = Math.floor((Math.random() * 10) + 1);
-	if (rand % 3 == 0) {
-		low2.push(lowcfChord);
-		mel2.push(FGenerator());
-		low2.push(lowcgChord);
-		mel2.push(GGenerator());
-	} else if (rand % 3 == 1) {
-		low2.push(lowcemChord);
-		mel2.push(emGenerator());
-		low2.push(lowcfChord);
-		mel2.push(FGenerator());
-	} else {
-		low2.push(lowcgChord);
-		mel2.push(GGenerator());
-		low2.push(lowcfChord);
-		mel2.push(FGenerator());
-		low2.push(lowcgChord);
-		mel2.push(GGenerator());
-	}
-}
-
-var LowFinal = [];
-var lowlength = low.length;
-var low2length = low2.length;
-
-for (var i = 0; i < lowlength; i++) {
-	LowFinal.push(low[i]);
-}
-
-for (var i = 0; i < low2length; i++) {
-	LowFinal.push(low2[i]);
-}
-
-for (var i = 0; i < low2length; i++) {
-	LowFinal.push(low2[i]);
-}
-
-for (var i = 0; i < lowlength; i++) {
-	LowFinal.push(low[i]);
-}
-
-melFinal = [];
-var mellength = mel.length;
-var mel2length = mel2.length;
-
-for (var i = 0; i < mellength; i++) {
-	melFinal.push(mel[i]);
-}
-
-for (var i = 0; i < mel2length; i++) {
-	melFinal.push(mel2[i]);
-}
-
-for (var i = 0; i < low2length; i++) {
-	melFinal.push(mel2[i]);
-}
-
-for (var i = 0; i < lowlength; i++) {
-	melFinal.push(mel[i]);
-}
-
-if (majmin == true) {
-	var seq = new Tone.Sequence(function(time, note) {
-		console.log(note);
-		//straight quater notes
-		synth.triggerAttackRelease(note);
-	}, LowFinal, "4n").start(0);
-
-
-	var seq = new Tone.Sequence(function(time, note) {
-		console.log(note);
-		//straight quater notes
-			synth.triggerAttackRelease(note);
-		}, melFinal, "4n").start(0);
-
-	Tone.Transport.start();
-} else {
-	var seq = new Tone.Sequence(function(time, note) {
-		console.log(note);
-		//straight quater notes
-		synth.triggerAttackRelease(note, "1n", time);
-	}, minor, "1n").start(0);
-
-	var seq = new Tone.Sequence(function(time, note) {
-		console.log(note);
-		//straight quater notes
-		synth.triggerAttackRelease(note, "4n", time);
-	}, minorMel, "4n").start(0);
-
-	Tone.Transport.start();
-}
-
-
-
-		//Tone.Transport.bpm.value=10;
-		//Tone.Transport.start();
-			/*
-			//create a synth and connect it to the master output (your speakers)
-			var synth = new Tone.Synth().toMaster();
-			//play a middle 'C' for the duration of an 8th note
-			synth.triggerAttackRelease("C4", "8n");
-			Tone.Transport.start();
-			*/
+Tone.Transport.bpm.value = 80;
+Tone.Transport.start();
+*/
