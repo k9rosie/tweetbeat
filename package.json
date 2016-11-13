@@ -16,6 +16,9 @@
     "url": "https://github.com/xanthehammer/mlh-prime/issues"
   },
   "dependencies": {
-  	"express": "4.14.0"
+    "express": "4.14.0",
+    "socket.io": "^1.5.1",
+    "twit": "^2.2.5",
+    "watson-developer-cloud": "^2.8.2"
   }
 }

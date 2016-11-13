@@ -1,0 +1,13 @@
+<html>
+	<body>
+		<h1>test</h1>
+
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			var socket = io.connect();
+			socket.on('test', function (data) {
+				console.log(data);
+			});
+		</script>
+	</body>
+</html>
