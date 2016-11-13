@@ -196,6 +196,9 @@ function generate_song(data) {
 
   if(happiness-unhappiness < 0){
     if(sadness+disgust > anger+fear){
+      for (var i = 0; i < 8; i++) {
+        eighth_notes.push(minor.next()+octave);
+      }
       for (var i = 0; i < ((4*length)*measures); i++) {
         quarter_notes.push(minor.next()+octave);
       }
@@ -210,6 +213,9 @@ function generate_song(data) {
       for (var i = 0; i < ((4*length)*measures); i++) {
         quarter_notes.push(minor.next()+octave);
       }
+      for (var i = 0; i < ((2*length)*measures); i++) {
+        half_notes.push(minor.next()+octave);
+    }
     }
   }
   else{
