@@ -175,8 +175,23 @@ socket.on('tweet', function (data) {
 });
 
 function generate_song(data) {
+  var measures = 4;
+  var tone = data.tone;
   var character_count = data.tweet.text.length;
+  var anger = Math.round(tone.document_tone.tone_categories[0].tones[0].score*100);
+  var disgust = Math.round(tone.document_tone.tone_categories[0].tones[1].score*100);
+  var fear = Math.round(tone.document_tone.tone_categories[0].tones[2].score*100);
+  var sadness = Math.round(tone.document_tone.tone_categories[0].tones[4].score*100);
 
+  var joy = Math.round(tone.document_tone.tone_categories[0].tones[3].score*100);
+  var confident = Math.round(tone.document_tone.tone_categories[1].tones[1].score*100);
+  var extraversion = Math.round(tone.document_tone.tone_categories[2].tones[2].score*100);
+  var openness = Math.round(tone.document_tone.tone_categories[2].tones[0].score*100);
+
+  var happiness = (joy + confident + extraversion + openness)/4;
+  var unhappiness = (anger + disgust + fear + sadness)/4;
+
+  var length = ((Math.floor(character_count / 64)) == 0) ? 1 : character_count / 64;
 
   for (var i = 0; i < 8; i++) {
     eighth_notes.push(major.next()+high_octave);
@@ -188,72 +203,3 @@ function generate_song(data) {
     half_notes.push(major.next()+low_octave);
   }
 }
-
-/*
-var test = Tone.Transport.scheduleOnce(function() {
-  var melody_eighth = eighth_notes.pop();
-  var melody_quarter = quarter_notes.pop();
-  var melody_half = half_notes.pop();
-
-  var seq = new Tone.Sequence(function(time, note) {
-      synth3.triggerAttackRelease(note);
-  }, melody_eighth, "8n");
-  seq.loop = false;
-
-  var seq2 = new Tone.Sequence(function(time, note) {
-      synth2.triggerAttackRelease(note);
-  }, melody_quarter, "4n");
-  seq2.loop = false;
-  
-
-  var seq3 = new Tone.Sequence(function(time, note) {
-      synth3.triggerAttackRelease(note);
-  }, melody_half, "2n");
-  seq3.loop = false;
-
-  seq.start(0);
-  seq2.start(0);
-  seq3.start(0);
-
-}, 0);
-
-/*
-var eighth_notes = [];
-var quarter_notes = [];
-var half_notes = [];
-
-/*
-// get notes
-for (var x = 0; x < 16; x++) {
-    var note = minor.next();
-    eighth_notes.push(note+high_octave);
-}
-// get notes
-for (var x = 0; x < 8; x++) {
-    var note = minor.next();
-    quarter_notes.push(note+octave);
-}
-for (var x = 0; x < 4; x++) {
-    var note = minor.next();
-    half_notes.push(note+low_octave);
-}
-
-var synth = new Tone.Synth().toMaster();
-var synth2 = new Tone.Synth().toMaster();
-var synth3 = new Tone.Synth().toMaster();
-
-var seq = new Tone.Sequence(function(time, note){
-    synth3.triggerAttackRelease(note);
-}, eighth_notes, "8n").start(0);
-
-var seq2 = new Tone.Sequence(function(time, note){
-    synth.triggerAttackRelease(note);
-}, quarter_notes, "4n").start(0);
-
-var seq3 = new Tone.Sequence(function(time, note){
-    synth2.triggerAttackRelease(note);
-}, half_notes, "2n").start(0);
-
-Tone.Transport.bpm.value = 80;
-Tone.Transport.start();
-*/
