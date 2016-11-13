@@ -7,16 +7,24 @@
     	<title>TweetBeet</title>
     	<link rel="stylesheet" type="text/css" href="/static/bootstrap/dist/css/bootstrap.min.css">
     	<link rel="stylesheet" type="text/css" href="/static/css/index.css">
+    	
+    	<style>
+    		h5{
+    			text-align: center;
+    		}
+    	</style>
+    	
     </head>
 
     <body>
     	<div class="container">
-			<img src="logo.png">
+    		<br />
+			<img src="static/images/logo.png" height = "40" width = "300">
 			<hr />
 			<h5>Compose a tweet using #tweetbeet and a song will play based on the content of your tweet</h5>
 
 			<div class="panel panel-default">
-				<div class="panel-heading">TweetBeet</div>
+				<div class="panel-heading">Tweets</div>
 				<ul class="list-group" id="tweets">
 					<div id="empty" style="text-align:center"><h3>Nothing to show so far. Tweet us at #tweetbeet!</h3></div>
 				</ul>
