@@ -37,7 +37,9 @@ server.listen(port, host, function() {
 });
 
 
-var stream = twitter.stream('statuses/filter', { track: '#xanthe'});
+//var stream = twitter.stream('statuses/filter', { track: '#xanthe'});
+
+var stream = twitter.stream('statuses/sample', { language: "en" });
 
 stream.on('tweet', function (tweet) {
 	tone_analyzer.tone({ text: tweet.text },
@@ -45,7 +47,7 @@ stream.on('tweet', function (tweet) {
 		if (err) {
   			console.log(err);
 		} else {
-  			io.emit('test', {text:tweet.text, tone:tone});
+  			io.emit('tweet', {tweet:tweet, tone:tone});
 		}
 	});
 });

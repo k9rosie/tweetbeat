@@ -6,38 +6,26 @@
     	<meta name="viewport" content="width=device-width, initial-scale=1">
     	<title>mlh-prime demo project</title>
     	<link rel="stylesheet" type="text/css" href="/static/bootstrap/dist/css/bootstrap.min.css">
+    	<link rel="stylesheet" type="text/css" href="/static/css/index.css">
     </head>
 
     <body>
     	<div class="container">
 			<h1>Demo project</h1>
+			<hr />
+
+			<div class="panel panel-default">
+				<div class="panel-heading">Tweets</div>
+				<ul class="list-group" id="tweets">
+				</ul>
+			</div>
 		</div>
 	</body>
+		<script src="/static/jquery/dist/jquery.min.js"></script>
+		<script src="/static/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="/static/tone/build/Tone.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
-		<script src="/static/js/music.js"></script>
-		<script>
-			var socket = io.connect();
-			socket.on('test', function (data) {
-				var tone = data.tone;
-				console.log(data.text+":");
-				console.log("\tEmotions:");
-	  			console.log("\t\tAnger: "+Math.round(tone.document_tone.tone_categories[0].tones[0].score*100));
-	  			console.log("\t\tDisgust: "+Math.round(tone.document_tone.tone_categories[0].tones[1].score*100));
-	  			console.log("\t\tFear: "+Math.round(tone.document_tone.tone_categories[0].tones[2].score*100));
-	  			console.log("\t\tJoy: "+Math.round(tone.document_tone.tone_categories[0].tones[3].score*100));
-	  			console.log("\t\tSadness: "+Math.round(tone.document_tone.tone_categories[0].tones[4].score*100));
-	  			console.log("\tLanguage:");
-	  			console.log("\t\tAnalytical: "+Math.round(tone.document_tone.tone_categories[1].tones[0].score*100));
-	  			console.log("\t\tConfident: "+Math.round(tone.document_tone.tone_categories[1].tones[1].score*100));
-	  			console.log("\t\tTentative: "+Math.round(tone.document_tone.tone_categories[1].tones[2].score*100));
-	  			console.log("\tSocial:");
-	  			console.log("\t\tOpenness: "+Math.round(tone.document_tone.tone_categories[2].tones[0].score*100));
-	  			console.log("\t\tConscientiousness: "+Math.round(tone.document_tone.tone_categories[2].tones[1].score*100));
-	  			console.log("\t\tExtraversion: "+Math.round(tone.document_tone.tone_categories[2].tones[2].score*100));
-	  			console.log("\t\tAgreeableness: "+Math.round(tone.document_tone.tone_categories[2].tones[3].score*100));
-	  			console.log("\t\tEmotional Range: "+Math.round(tone.document_tone.tone_categories[2].tones[4].score*100));
-			});
-		</script>
+		<script src="/static/js/index.js"></script>
+		<script src="/static/js/music2.js"></script>
 	</body>
 </html>
