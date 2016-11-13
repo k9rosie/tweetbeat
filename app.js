@@ -39,7 +39,7 @@ server.listen(port, host, function() {
 
 //var stream = twitter.stream('statuses/filter', { track: '#xanthe'});
 
-var stream = twitter.stream('statuses/sample', { language: "en" });
+var stream = twitter.stream('statuses/filter', { track: "#tweetbeet", language: "en" });
 
 stream.on('tweet', function (tweet) {
 	tone_analyzer.tone({ text: tweet.text },
