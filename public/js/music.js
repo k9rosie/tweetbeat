@@ -193,7 +193,43 @@ function generate_song(data) {
 
   var length = ((Math.floor(character_count / 64)) == 0) ? 1 : character_count / 64;
 
-  for (var i = 0; i < 8; i++) {
+  if(happiness-unhappiness < 0){
+    if(sadness+disgust > anger+fear){
+      for (var i = 0; i < 4*length*measures; i++) {
+        quarter_notes.push(minor.next()+octave);
+      }
+      for (var i = 0; i < 2*length*measures; i++) {
+        half_notes.push(minor.next()+low_octave);
+    }
+  }
+    else{
+      for (var i = 0; i < 8*length*measures; i++) {
+        eighth_notes.push(minor.next()+high_octave);
+      }
+      for (var i = 0; i < 4*length*measures; i++) {
+        quarter_notes.push(minor.next()+octave);
+      }
+    }
+  }
+  else{
+    if(joy+openness> extraversion+confident){
+      for (var i = 0; i < 8*length*measures; i++) {
+        eighth_notes.push(major.next()+high_octave);
+      }
+      for (var i = 0; i < 4*length*measures; i++) {
+        quarter_notes.push(major.next()+octave);
+      }
+    }
+    else{
+      for (var i = 0; i < 4*length*measures; i++) {
+        quarter_notes.push(major.next()+octave);
+      }
+      for (var i = 0; i < 2*length*measures; i++) {
+        half_notes.push(major.next()+low_octave);
+      }
+    }
+  }
+  /*for (var i = 0; i < 8; i++) {
     eighth_notes.push(major.next()+high_octave);
   }
   for (var i = 0; i < 4; i++) {
@@ -201,5 +237,5 @@ function generate_song(data) {
   }
   for (var i = 0; i < 2; i++) {
     half_notes.push(major.next()+low_octave);
-  }
+  }*/
 }
